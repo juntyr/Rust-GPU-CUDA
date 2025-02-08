@@ -40,7 +40,7 @@ impl<T: DeviceCopy + Clone> LockedBuffer<T> {
         unsafe {
             let mut uninit = LockedBuffer::uninitialized(size)?;
             for x in 0..size {
-                *uninit.get_unchecked_mut(x) = *value;
+                *uninit.get_unchecked_mut(x) = value.clone();
             }
             Ok(uninit)
         }
@@ -66,7 +66,7 @@ impl<T: DeviceCopy + Clone> LockedBuffer<T> {
         unsafe {
             let mut uninit = LockedBuffer::uninitialized(slice.len())?;
             for (i, x) in slice.iter().enumerate() {
-                *uninit.get_unchecked_mut(i) = *x;
+                *uninit.get_unchecked_mut(i) = x.clone();
             }
             Ok(uninit)
         }

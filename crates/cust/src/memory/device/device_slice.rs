@@ -12,11 +12,18 @@ use std::ops::{Range, RangeFrom, RangeFull, RangeInclusive, RangeTo, RangeToIncl
 use std::os::raw::c_void;
 
 /// Fixed-size device-side slice.
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug)]
 #[repr(C)]
 pub struct DeviceSlice<T: DeviceCopy> {
     ptr: DevicePointer<T>,
     len: usize,
+}
+
+impl<T: DeviceCopy> Copy for DeviceSlice<T> {}
+impl<T: DeviceCopy> Clone for DeviceSlice<T> {
+    fn clone(&self) -> Self {
+        *self
+    }
 }
 
 unsafe impl<T: Send + DeviceCopy> Send for DeviceSlice<T> {}

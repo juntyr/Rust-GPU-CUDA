@@ -58,10 +58,10 @@ impl<T: DeviceCopy> LockedBox<T> {
     /// use cust::memory::LockedBox;
     ///
     ///
-    pub fn new(val: &T) -> CudaResult<Self> {
+    pub fn new(val: &T) -> CudaResult<Self> where T: Clone {
         unsafe {
             let mut uninit = Self::uninitialized()?;
-            *uninit = *val;
+            *uninit = val.clone();
             Ok(uninit)
         }
     }

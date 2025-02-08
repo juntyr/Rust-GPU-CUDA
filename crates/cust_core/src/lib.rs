@@ -70,7 +70,7 @@ pub mod _hidden {
     /// # Safety
     ///
     /// The type being implemented must hold no references to CPU data.
-    pub unsafe trait DeviceCopy: Copy {}
+    pub unsafe trait DeviceCopy: Sized {}
 
     macro_rules! impl_device_copy {
     ($($t:ty)*) => {

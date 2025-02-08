@@ -63,12 +63,12 @@ pub trait SliceExt<T: DeviceCopy> {
     }
 }
 
-impl<T: DeviceCopy> SliceExt<T> for &[T] {
+impl<T: DeviceCopy + Clone> SliceExt<T> for &[T] {
     fn as_dbuf(&self) -> CudaResult<DeviceBuffer<T>> {
         DeviceBuffer::from_slice(*self)
     }
 
-    fn as_unified_buf(&self) -> CudaResult<UnifiedBuffer<T>> {
+    fn as_unified_buf(&self) -> CudaResult<UnifiedBuffer<T>>{
         UnifiedBuffer::from_slice(*self)
     }
 
@@ -91,7 +91,7 @@ impl<T: DeviceCopy> SliceExt<T> for &[T] {
     }
 }
 
-impl<T: DeviceCopy, const N: usize> SliceExt<T> for [T; N] {
+impl<T: DeviceCopy + Clone, const N: usize> SliceExt<T> for [T; N] {
     fn as_dbuf(&self) -> CudaResult<DeviceBuffer<T>> {
         DeviceBuffer::from_slice(self)
     }

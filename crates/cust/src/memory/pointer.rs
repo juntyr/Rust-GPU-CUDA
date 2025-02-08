@@ -22,12 +22,18 @@ use std::mem::size_of;
 /// the other side of that boundary does not attempt to dereference the pointer on the CPU. It is
 /// thus possible to pass a `DevicePointer` to a CUDA kernel written in C.
 #[repr(transparent)]
-#[derive(Clone, Copy, Debug, PartialOrd, Ord, PartialEq, Eq, Hash)]
+#[derive(Debug, PartialOrd, Ord, PartialEq, Eq, Hash)]
 pub struct DevicePointer<T: ?Sized + DeviceCopy> {
     ptr: CUdeviceptr,
     marker: PhantomData<*mut T>,
 }
 
+impl<T: ?Sized + DeviceCopy> Copy for DevicePointer<T> {}
+impl<T: ?Sized + DeviceCopy> Clone for DevicePointer<T> {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
 unsafe impl<T: ?Sized + DeviceCopy> DeviceCopy for DevicePointer<T> {}
 
 impl<T: DeviceCopy> Pointer for DevicePointer<T> {
@@ -342,8 +348,15 @@ impl<T: ?Sized + DeviceCopy> DevicePointer<T> {
 /// `UnifiedPointer` through an FFI boundary to C code expecting a `*mut T`. It is
 /// thus possible to pass a `UnifiedPointer` to a CUDA kernel written in C.
 #[repr(transparent)]
-#[derive(Copy, Clone, Debug, PartialOrd, Ord, PartialEq, Eq, Hash)]
+#[derive(Debug, PartialOrd, Ord, PartialEq, Eq, Hash)]
 pub struct UnifiedPointer<T: ?Sized + DeviceCopy>(*mut T);
+
+impl<T: ?Sized + DeviceCopy> Copy for UnifiedPointer<T> {}
+impl<T: ?Sized + DeviceCopy> Clone for UnifiedPointer<T> {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
 
 unsafe impl<T: ?Sized + DeviceCopy> DeviceCopy for UnifiedPointer<T> {}
 

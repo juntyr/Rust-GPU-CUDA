@@ -132,7 +132,7 @@ pub fn find_cuda_lib_dirs() -> Vec<PathBuf> {
         candidates.push(e)
     }
     candidates.push(PathBuf::from("/usr/lib/cuda"));
-    candidates.push(detect_cuda_root_via_which_nvcc());
+    // candidates.push(detect_cuda_root_via_which_nvcc());
 
     let mut valid_paths = vec![];
     for base in &candidates {
